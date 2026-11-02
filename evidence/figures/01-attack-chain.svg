@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="1000" height="620" rx="12" fill="#0d1117"/>
+  <text x="34" y="46" fill="#e6edf3" font-size="22" font-weight="700">php2bitcoin: session.upload_progress UAF → in-band RCE</text>
+  <text x="34" y="72" fill="#7d8590" font-size="14">CVE-2026-109618 + CVE-2026-109619 · PHP 8.5.11 mod_php/Apache · HTTP-only, ASLR defeated in-band</text>
+
+  <!-- Stage 1 -->
+  <g>
+    <rect x="34" y="100" width="932" height="98" rx="10" fill="#161b22" stroke="#30363d"/>
+    <rect x="34" y="100" width="6" height="98" rx="3" fill="#f0883e"/>
+    <text x="58" y="128" fill="#f0883e" font-size="15" font-weight="700">STAGE 1: Heap leak (defeat Zend-MM ASLR)</text>
+    <text x="58" y="154" fill="#adbac7" font-size="13">Oversized multipart upload (~10 MB) OOMs the worker during RINIT → PS(id) is left dangling into a freed chunk.</text>
+    <text x="58" y="178" fill="#adbac7" font-size="13">A forged zend_string reclaims the slot; its bytes ride out in <tspan fill="#79c0ff">Set-Cookie: PHPSESSID=…</tspan> → chunk base <tspan fill="#56d364">0x7f8c45000000</tspan></text>
+  </g>
+  <path d="M500 198 L500 220" stroke="#484f58" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Stage 2 -->
+  <g>
+    <rect x="34" y="224" width="932" height="98" rx="10" fill="#161b22" stroke="#30363d"/>
+    <rect x="34" y="224" width="6" height="98" rx="3" fill="#d29922"/>
+    <text x="58" y="252" fill="#d29922" font-size="15" font-weight="700">STAGE 2: libphp leak (defeat libphp ASLR)</text>
+    <text x="58" y="278" fill="#adbac7" font-size="13">A 56-byte fake HashTable overlaps PS(id)+0x18; its pDestructor (a libphp code ptr, zval_ptr_dtor) leaks the same way.</text>
+    <text x="58" y="302" fill="#adbac7" font-size="13">A low-12-bits check confirms a real code pointer → libphp base <tspan fill="#56d364">0x7f8c46c00000</tspan></text>
+  </g>
+  <path d="M500 322 L500 344" stroke="#484f58" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Stage 3 -->
+  <g>
+    <rect x="34" y="348" width="932" height="120" rx="10" fill="#161b22" stroke="#30363d"/>
+    <rect x="34" y="348" width="6" height="120" rx="3" fill="#f85149"/>
+    <text x="58" y="376" fill="#f85149" font-size="15" font-weight="700">STAGE 3: Reclaim → code execution</text>
+    <text x="58" y="402" fill="#adbac7" font-size="13">The dangling slot is reclaimed with a fake zend_array + execute_data; the destructor is repointed to</text>
+    <text x="58" y="424" fill="#adbac7" font-size="13"><tspan fill="#79c0ff">zif_system</tspan> (= libphp+0x5996e0). The command is sprayed as external zend_string carriers, lifting the ~14-byte cap.</text>
+    <text x="58" y="446" fill="#adbac7" font-size="13">On request shutdown PHP runs <tspan fill="#ffa657" font-family="ui-monospace,monospace">system("/readflag; echo &lt;nonce&gt;")</tspan> as www-data.</text>
+  </g>
+  <path d="M500 468 L500 490" stroke="#484f58" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Exfil -->
+  <g>
+    <rect x="34" y="494" width="932" height="92" rx="10" fill="#12261a" stroke="#238636"/>
+    <text x="58" y="524" fill="#56d364" font-size="15" font-weight="700">IN-BAND EXFIL</text>
+    <text x="58" y="550" fill="#adbac7" font-size="13">system()'s stdout flushes through the SAPI output buffer into the same HTTP response that is still</text>
+    <text x="58" y="572" fill="#adbac7" font-size="13">being streamed, and the flag returns in the response body. No writable webroot, no outbound collector.</text>
+  </g>
+
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#484f58"/>
+    </marker>
+  </defs>
+</svg>

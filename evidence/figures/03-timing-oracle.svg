@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="900" height="480" rx="12" fill="#0d1117"/>
+  <text x="34" y="42" fill="#e6edf3" font-size="20" font-weight="700">Control-flow proof before exfil: timing oracles</text>
+  <text x="34" y="66" fill="#7d8590" font-size="13">Reclaim latency spikes to the injected sleep duration only when the hijacked call fires. Two durations, no coincidence.</text>
+
+  <!-- shared geometry: baseline y=300, scale 15 px/s, bar width 34 -->
+  <!-- gridlines at 5s and 10s -->
+  <line x1="60" y1="225" x2="860" y2="225" stroke="#21262d" stroke-dasharray="3 4"/>
+  <line x1="60" y1="150" x2="860" y2="150" stroke="#21262d" stroke-dasharray="3 4"/>
+  <text x="54" y="229" fill="#484f58" font-size="11" text-anchor="end">5s</text>
+  <text x="54" y="154" fill="#484f58" font-size="11" text-anchor="end">10s</text>
+  <line x1="60" y1="300" x2="860" y2="300" stroke="#30363d"/>
+
+  <!-- LEFT: sleep 9 ; attempts 1..6 = 1.0, 9.5, 0.5, 2.3, 2.6, 9.5 -->
+  <text x="80" y="100" fill="#adbac7" font-size="13" font-weight="600">cmd = 'sleep 9'  ·  attempts 1–6</text>
+  <g>
+    <rect x="80"  y="285" width="34" height="15"  fill="#484f58"/>
+    <rect x="140" y="158" width="34" height="142" fill="#f85149"/>
+    <rect x="200" y="293" width="34" height="7"   fill="#484f58"/>
+    <rect x="260" y="266" width="34" height="34"  fill="#484f58"/>
+    <rect x="320" y="261" width="34" height="39"  fill="#484f58"/>
+    <rect x="380" y="158" width="34" height="142" fill="#f85149"/>
+    <text x="97"  y="318" fill="#7d8590" font-size="11" text-anchor="middle">1.0</text>
+    <text x="157" y="318" fill="#f85149" font-size="11" text-anchor="middle">9.5</text>
+    <text x="217" y="318" fill="#7d8590" font-size="11" text-anchor="middle">0.5</text>
+    <text x="277" y="318" fill="#7d8590" font-size="11" text-anchor="middle">2.3</text>
+    <text x="337" y="318" fill="#7d8590" font-size="11" text-anchor="middle">2.6</text>
+    <text x="397" y="318" fill="#f85149" font-size="11" text-anchor="middle">9.5</text>
+  </g>
+
+  <!-- divider -->
+  <line x1="450" y1="92" x2="450" y2="300" stroke="#21262d"/>
+
+  <!-- RIGHT: sleep 12 ; attempts 1..5 = 0.5, 0.5, 0.5, 0.5, 12.5 -->
+  <text x="490" y="100" fill="#adbac7" font-size="13" font-weight="600">cmd = 'sleep 12'  ·  attempts 1–5</text>
+  <g>
+    <rect x="490" y="293" width="34" height="7"   fill="#484f58"/>
+    <rect x="550" y="293" width="34" height="7"   fill="#484f58"/>
+    <rect x="610" y="293" width="34" height="7"   fill="#484f58"/>
+    <rect x="670" y="293" width="34" height="7"   fill="#484f58"/>
+    <rect x="730" y="112" width="34" height="188" fill="#f85149"/>
+    <text x="507" y="318" fill="#7d8590" font-size="11" text-anchor="middle">0.5</text>
+    <text x="567" y="318" fill="#7d8590" font-size="11" text-anchor="middle">0.5</text>
+    <text x="627" y="318" fill="#7d8590" font-size="11" text-anchor="middle">0.5</text>
+    <text x="687" y="318" fill="#7d8590" font-size="11" text-anchor="middle">0.5</text>
+    <text x="747" y="318" fill="#f85149" font-size="11" text-anchor="middle">12.5</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="12">
+    <rect x="80" y="340" width="13" height="13" rx="2" fill="#f85149"/>
+    <text x="101" y="351" fill="#adbac7">hijacked call fired: reclaim latency equals the injected sleep</text>
+    <rect x="500" y="340" width="13" height="13" rx="2" fill="#484f58"/>
+    <text x="521" y="351" fill="#adbac7">reclaim missed: sub-second response</text>
+  </g>
+
+  <!-- caption -->
+  <rect x="34" y="376" width="832" height="78" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="50" y="402" fill="#e6edf3" font-size="13" font-weight="700">Why this matters</text>
+  <text x="50" y="424" fill="#adbac7" font-size="12.5">The hijack was proven with a side effect that reads no data and leaves no artifact, at two different</text>
+  <text x="50" y="442" fill="#adbac7" font-size="12.5">durations, before /readflag was ever sent. Crash-oracle counters were checked throughout, and no worker was harmed.</text>
+</svg>
