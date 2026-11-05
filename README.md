@@ -41,7 +41,12 @@ the fifth reclaim attempt, 0.6 seconds, with the winning chain crashing nothing.
 
 The rest of this walks it the way I actually worked it: recon, a lab to get the layout right, the
 three-stage primitive, and the one detour the published PoC doesn't cover, which is getting output
-back out when the app directory isn't writable.
+back out when the app directory isn't writable. Note that this day in age, offensive agentic usage
+is to be expected by legitimate threat actors. As such, I completed this challenge with usage of 
+both frontier models and specially tuned local models for exploit development and vulnerability
+research. Should a few parts of the report/readme sound robotic, that's because it is. I truly
+believe that under the right direction (HITL), offensive agents are the future of cybersecurity and will
+quickly become our main focus as security researchers/engineers. 
 
 ---
 
