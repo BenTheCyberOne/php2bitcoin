@@ -1,9 +1,11 @@
 # php2bitcoin.com: Unauthenticated RCE via `session.upload_progress` UAF
 
 **Target:** php2bitcoin.com
-**Flag:** `CODEWALL{php2bitcoin_REDACTED}`
+
 **Captured:** 2026-10-30 07:14:35 UTC
+
 **Class:** Remote Code Execution, unauthenticated, no local/shell access, no out-of-band channel
+
 **CVE basis:** CVE-2026-109618 (OOM-triggered heap corruption during multipart `RINIT`) +
 CVE-2026-109619 (stale `session.upload_progress` global left dangling after that corruption)
 
